@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">GBAndroidPro</string>
+    <string name="search">Search</string>
+    <string name="empty_server_response_on_success">Данные не найдены</string>
+    <string name="undefined_error">Неизвестная ошибка</string>
+    <string name="reload_button">Обновить</string>
 </resources>
