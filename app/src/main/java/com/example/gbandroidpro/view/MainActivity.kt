@@ -4,17 +4,44 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.gbandroidpro.Presenter
 import com.example.gbandroidpro.R
-import com.example.gbandroidpro.View
+import com.example.gbandroidpro.di.ViewModelFactory
 import com.example.gbandroidpro.model.DataModel
-import com.example.gbandroidpro.presenter.MainPresenterImpl
+import com.example.gbandroidpro.presenter.MainInteractor
+import com.example.gbandroidpro.vm.MainViewModel
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
-class MainActivity : BaseActivity<AppState>() {
-
+class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private var adapter: MainAdapter? = null // Адаптер для отображения списка вариантов перевода
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+    override lateinit var model: MainViewModel
+
+    private val observer = Observer<AppState> {
+        renderData(it)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+        super.onCreate(savedInstanceState)
+
+        model = viewModelFactory.create(MainViewModel::class.java)
+        setContentView(R.layout.activity_main)
+        search_fab.setOnClickListener {
+            val searchDialogFragment = SearchDialogFragment.newInstance()
+            searchDialogFragment.setOnSearchClickListener(object : SearchDialogFragment.OnSearchClickListener {
+                override fun onClick(searchWord: String) {
+                    model.getData(searchWord, true).observe(this@MainActivity, observer)
+                }
+            })
+            searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
+        }
+    }
 
     // Обработка нажатия элемента списка
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
@@ -23,25 +50,6 @@ class MainActivity : BaseActivity<AppState>() {
                 Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
             }
         }
-
-    // Создаём презентер и храним его в базовой Activity
-    override fun createPresenter(): Presenter<AppState, View> {
-        return MainPresenterImpl()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        search_fab.setOnClickListener {
-            val searchDialogFragment = SearchDialogFragment.newInstance()
-            searchDialogFragment.setOnSearchClickListener(object : SearchDialogFragment.OnSearchClickListener {
-                override fun onClick(searchWord: String) {
-                    presenter.getData(searchWord, true)
-                }
-            })
-            searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
-        }
-    }
 
     // Переопределяем базовый метод
     override fun renderData(appState: AppState) {
@@ -85,7 +93,7 @@ class MainActivity : BaseActivity<AppState>() {
         showViewError()
         error_textview.text = error ?: getString(R.string.undefined_error)
         reload_button.setOnClickListener {
-            presenter.getData("hi", true)
+            model.getData("hi", true).observe(this, observer)
         }
     }
 
