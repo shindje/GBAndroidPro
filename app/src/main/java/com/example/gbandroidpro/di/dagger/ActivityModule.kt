@@ -1,4 +1,4 @@
-package com.example.gbandroidpro.di
+package com.example.gbandroidpro.di.dagger
 
 import com.example.gbandroidpro.view.MainActivity
 import dagger.Module

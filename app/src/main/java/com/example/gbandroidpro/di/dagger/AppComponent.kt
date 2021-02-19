@@ -1,6 +1,7 @@
-package com.example.gbandroidpro.di
+package com.example.gbandroidpro.di.dagger
 
 import android.app.Application
+import com.example.gbandroidpro.di.TranslatorApp
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule

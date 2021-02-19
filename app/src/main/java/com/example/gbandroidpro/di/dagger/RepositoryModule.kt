@@ -1,9 +1,8 @@
-package com.example.gbandroidpro.di
+package com.example.gbandroidpro.di.dagger
 
 import com.example.gbandroidpro.DataSource
 import com.example.gbandroidpro.Repository
 import com.example.gbandroidpro.model.DataModel
-import com.example.gbandroidpro.presenter.repo.DataSourceRemote
 import com.example.gbandroidpro.presenter.repo.RepositoryImplementation
 import com.example.gbandroidpro.presenter.repo.RetrofitImplementation
 import com.example.gbandroidpro.presenter.repo.RoomDataBaseImplementation
