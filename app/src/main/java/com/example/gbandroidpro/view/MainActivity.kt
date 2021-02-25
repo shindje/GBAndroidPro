@@ -5,42 +5,38 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gbandroidpro.R
-import com.example.gbandroidpro.di.ViewModelFactory
 import com.example.gbandroidpro.model.DataModel
 import com.example.gbandroidpro.presenter.MainInteractor
 import com.example.gbandroidpro.vm.MainViewModel
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 import javax.inject.Inject
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private var adapter: MainAdapter? = null // Адаптер для отображения списка вариантов перевода
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
-    override lateinit var model: MainViewModel
-
-    private val observer = Observer<AppState> {
-        renderData(it)
-    }
+    override val model: MainViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
-        model = viewModelFactory.create(MainViewModel::class.java)
         setContentView(R.layout.activity_main)
         search_fab.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(object : SearchDialogFragment.OnSearchClickListener {
                 override fun onClick(searchWord: String) {
-                    model.getData(searchWord, true).observe(this@MainActivity, observer)
+                    model.getData(searchWord, true)
                 }
             })
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
+
+        model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
     }
 
     // Обработка нажатия элемента списка
@@ -93,7 +89,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         showViewError()
         error_textview.text = error ?: getString(R.string.undefined_error)
         reload_button.setOnClickListener {
-            model.getData("hi", true).observe(this, observer)
+            model.getData("hi", true)
         }
     }
 

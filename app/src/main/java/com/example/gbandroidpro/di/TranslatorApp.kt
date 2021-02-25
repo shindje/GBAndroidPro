@@ -2,24 +2,17 @@ package com.example.gbandroidpro.di
 
 import android.app.Activity
 import android.app.Application
-import dagger.android.AndroidInjector
+import com.example.gbandroidpro.di.dagger.DaggerAppComponent
+import com.example.gbandroidpro.di.koin.application
+import com.example.gbandroidpro.di.koin.mainScreen
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import org.koin.core.context.startKoin
 import javax.inject.Inject
 
-class TranslatorApp: Application(), HasActivityInjector {
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
-
-    override fun activityInjector(): DispatchingAndroidInjector<Activity>? {
-        return dispatchingAndroidInjector
-    }
-
+class TranslatorApp: Application() {
     override fun onCreate() {
         super.onCreate()
-        DaggerAppComponent.builder()
-            .application(this)
-            .build()
-            .inject(this)
+        startKoin { modules(listOf(application, mainScreen)) }
     }
 }

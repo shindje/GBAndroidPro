@@ -2,25 +2,25 @@ package com.example.gbandroidpro.presenter
 
 import com.example.gbandroidpro.Interactor
 import com.example.gbandroidpro.Repository
-import com.example.gbandroidpro.di.NAME_LOCAL
-import com.example.gbandroidpro.di.NAME_REMOTE
+import com.example.gbandroidpro.di.dagger.NAME_LOCAL
+import com.example.gbandroidpro.di.dagger.NAME_REMOTE
 import com.example.gbandroidpro.model.DataModel
 import com.example.gbandroidpro.view.AppState
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Named
 
-class MainInteractor @Inject constructor(
-    @Named(NAME_REMOTE) val remoteRepository: Repository<List<DataModel>>,
-    @Named(NAME_LOCAL) val localRepository: Repository<List<DataModel>>
+class MainInteractor constructor(
+    val remoteRepository: Repository<List<DataModel>>,
+    val localRepository: Repository<List<DataModel>>
 ) : Interactor<AppState> {
-    // Интерактор лишь запрашивает у репозитория данные, детали имплементации
-    // интерактору неизвестны
-    override fun getData(word: String, fromRemoteSource: Boolean): Observable<AppState> {
-        return if (fromRemoteSource) {
-            remoteRepository.getData(word).map { AppState.Success(it) }
-        } else {
-            localRepository.getData(word).map { AppState.Success(it) }
-        }
+    override suspend fun getData(word: String, fromRemoteSource: Boolean): AppState {
+        return AppState.Success(
+            if (fromRemoteSource) {
+                remoteRepository
+            } else {
+                localRepository
+            }.getData(word)
+        )
     }
 }

@@ -1,4 +1,4 @@
-package com.example.gbandroidpro.di
+package com.example.gbandroidpro.di.dagger
 
 import com.example.gbandroidpro.Repository
 import com.example.gbandroidpro.model.DataModel

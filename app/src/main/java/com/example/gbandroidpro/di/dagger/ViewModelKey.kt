@@ -1,4 +1,4 @@
-package com.example.gbandroidpro.di
+package com.example.gbandroidpro.di.dagger
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey
