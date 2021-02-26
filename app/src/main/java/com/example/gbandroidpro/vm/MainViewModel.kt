@@ -1,16 +1,10 @@
 package com.example.gbandroidpro.vm
 
 import androidx.lifecycle.LiveData
-import com.example.gbandroidpro.Interactor
 import com.example.gbandroidpro.model.parseSearchResults
 import com.example.gbandroidpro.presenter.MainInteractor
-import com.example.gbandroidpro.presenter.repo.DataSourceLocal
-import com.example.gbandroidpro.presenter.repo.DataSourceRemote
-import com.example.gbandroidpro.presenter.repo.RepositoryImplementation
 import com.example.gbandroidpro.view.AppState
-import io.reactivex.observers.DisposableObserver
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class MainViewModel constructor(private val interactor: MainInteractor)
     : BaseViewModel<AppState>() {

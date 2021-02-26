@@ -1,5 +1,6 @@
 package com.example.gbandroidpro.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -14,6 +15,7 @@ import com.example.gbandroidpro.presenter.MainInteractor
 import com.example.gbandroidpro.vm.MainViewModel
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.include_loading_frame_layout.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import javax.inject.Inject
@@ -36,6 +38,10 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
 
+        history_fab.setOnClickListener {
+            startActivity(Intent(this, HistoryActivity::class.java))
+        }
+
         model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
     }
 
@@ -55,45 +61,16 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             }
         }
 
-    // Переопределяем базовый метод
-    override fun renderData(appState: AppState) {
-        // В зависимости от состояния модели данных (загрузка, отображение,
-        // ошибка) отображаем соответствующий экран
-        when (appState) {
-            is AppState.Success -> {
-                val dataModel = appState.data
-                if (dataModel == null || dataModel.isEmpty()) {
-                    showErrorScreen(getString(R.string.empty_server_response_on_success))
-                } else {
-                    showViewSuccess()
-                    if (adapter == null) {
-                        main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
-                        main_activity_recyclerview.adapter = MainAdapter(onListItemClickListener, dataModel)
-                    } else {
-                        adapter!!.setData(dataModel)
-                    }
-                }
-            }
-            is AppState.Loading -> {
-                showViewLoading()
-                // Задел на будущее, если понадобится отображать прогресс
-                // загрузки
-                if (appState.progress != null) {
-                    progress_bar_horizontal.visibility = VISIBLE
-                    progress_bar_round.visibility = GONE
-                    progress_bar_horizontal.progress = appState.progress
-                } else {
-                    progress_bar_horizontal.visibility = GONE
-                    progress_bar_round.visibility = VISIBLE
-                }
-            }
-            is AppState.Error -> {
-                showErrorScreen(appState.error.message)
-            }
+    override fun setDataToAdapter(data: List<DataModel>) {
+        if (adapter == null) {
+            main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
+            main_activity_recyclerview.adapter = MainAdapter(onListItemClickListener, data)
+        } else {
+            adapter!!.setData(data)
         }
     }
 
-    private fun showErrorScreen(error: String?) {
+    override fun showError(error: String?) {
         showViewError()
         error_textview.text = error ?: getString(R.string.undefined_error)
         reload_button.setOnClickListener {
@@ -101,13 +78,13 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         }
     }
 
-    private fun showViewSuccess() {
+    override fun showViewSuccess() {
         main_activity_recyclerview.visibility = VISIBLE
         loading_frame_layout.visibility = GONE
         error_linear_layout.visibility = GONE
     }
 
-    private fun showViewLoading() {
+    override fun showViewLoading() {
         main_activity_recyclerview.visibility = GONE
         loading_frame_layout.visibility = VISIBLE
         error_linear_layout.visibility = GONE
