@@ -12,6 +12,10 @@ interface Repository<T> {
 
 interface RepositoryLocal<T>: Repository<T> {
     suspend fun setData(appState: AppState)
+    suspend fun getFavourites(): T
+    suspend fun setFavourite(word: String, description: String?)
+    suspend fun removeFavourite(word: String)
+    suspend fun isFavourite(word: String): Boolean
 }
 
 interface DataSource<T> {
@@ -20,4 +24,8 @@ interface DataSource<T> {
 
 interface DataSourceLocal<T>: DataSource<T> {
     suspend fun setData(appState: AppState)
+    suspend fun getFavourites(): T
+    suspend fun setFavourite(word: String, description: String?)
+    suspend fun removeFavourite(word: String)
+    suspend fun isFavourite(word: String): Boolean
 }

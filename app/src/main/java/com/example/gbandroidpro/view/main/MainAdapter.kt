@@ -1,4 +1,4 @@
-package com.example.gbandroidpro.view
+package com.example.gbandroidpro.view.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,13 +8,15 @@ import com.example.gbandroidpro.R
 import com.example.gbandroidpro.model.DataModel
 import kotlinx.android.synthetic.main.activity_main_recyclerview_item.view.*
 
-class MainAdapter(private var onListItemClickListener: OnListItemClickListener, private var data: List<DataModel>) :
+class MainAdapter(private var onItemClickListener: OnClickListener, private var onFavouriteClickListener: OnClickListener, private var data: List<DataModel>) :
     RecyclerView.Adapter<MainAdapter.RecyclerItemViewHolder>() {
 
     fun setData(data: List<DataModel>) {
         this.data = data
         notifyDataSetChanged()
     }
+
+    fun getData() = data
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerItemViewHolder {
         return RecyclerItemViewHolder(
@@ -38,16 +40,17 @@ class MainAdapter(private var onListItemClickListener: OnListItemClickListener, 
                 itemView.header_textview_recycler_item.text = data.text
                 itemView.description_textview_recycler_item.text = data.meanings?.get(0)?.translation?.translation
 
-                itemView.setOnClickListener { openInNewWindow(data) }
+                itemView.setOnClickListener { onItemClickListener.onItemClick(data, layoutPosition) }
+                itemView.iv_favourite.setOnClickListener { onFavouriteClickListener.onItemClick(data, layoutPosition) }
+                if (data.isFavorite != null && data.isFavorite!!)
+                    itemView.iv_favourite.setImageResource(R.drawable.ic_baseline_star_yellow_24)
+                else
+                    itemView.iv_favourite.setImageResource(R.drawable.ic_baseline_star_outline_24)
             }
         }
     }
 
-    private fun openInNewWindow(listItemData: DataModel) {
-        onListItemClickListener.onItemClick(listItemData)
-    }
-
-    interface OnListItemClickListener {
-        fun onItemClick(data: DataModel)
+    interface OnClickListener {
+        fun onItemClick(data: DataModel, position: Int)
     }
 }

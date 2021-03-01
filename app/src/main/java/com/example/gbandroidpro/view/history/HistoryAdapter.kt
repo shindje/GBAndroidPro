@@ -1,4 +1,4 @@
-package com.example.gbandroidpro.view
+package com.example.gbandroidpro.view.history
 
 import android.view.LayoutInflater
 import android.view.View

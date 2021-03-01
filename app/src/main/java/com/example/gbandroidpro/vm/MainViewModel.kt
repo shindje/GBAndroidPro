@@ -21,6 +21,26 @@ class MainViewModel constructor(private val interactor: MainInteractor)
         }
     }
 
+    fun setFavourite(word: String, description: String?) {
+        viewModelCoroutineScope.launch {
+            interactor.setFavourite(word, description)
+        }
+    }
+
+    fun removeFavourite(word: String) {
+        viewModelCoroutineScope.launch {
+            interactor.removeFavourite(word)
+        }
+    }
+
+    fun getFavourites() {
+        liveData.value = AppState.Loading(null)
+        cancelJob()
+        viewModelCoroutineScope.launch {
+            liveData.postValue(parseSearchResults(interactor.getFavourites()))
+        }
+    }
+
     override fun handleError(error: Throwable) {
         liveData.postValue(AppState.Error(error))
     }

@@ -18,7 +18,22 @@ class MainInteractor constructor(
         } else {
             appState = AppState.Success(localRepository.getData(word))
         }
-
+        //check Favourites
+        if (appState is AppState.Success && appState.data != null)
+            for (dataModel in appState.data)
+                dataModel.isFavorite = localRepository.isFavourite(dataModel.text!!)
         return appState
+    }
+
+    suspend fun setFavourite(word: String, description: String?) {
+        localRepository.setFavourite(word, description)
+    }
+
+    suspend fun removeFavourite(word: String) {
+        localRepository.removeFavourite(word)
+    }
+
+    suspend fun getFavourites(): AppState {
+        return AppState.Success(localRepository.getFavourites())
     }
 }

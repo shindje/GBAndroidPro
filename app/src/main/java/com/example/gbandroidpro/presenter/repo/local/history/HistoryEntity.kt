@@ -1,4 +1,4 @@
-package com.example.gbandroidpro.presenter.repo.local
+package com.example.gbandroidpro.presenter.repo.local.history
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

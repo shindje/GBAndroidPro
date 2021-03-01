@@ -8,20 +8,20 @@ import com.example.gbandroidpro.presenter.HistoryInteractor
 import com.example.gbandroidpro.presenter.MainInteractor
 import com.example.gbandroidpro.presenter.repo.RepositoryImplementation
 import com.example.gbandroidpro.presenter.repo.RepositoryImplementationLocal
-import com.example.gbandroidpro.presenter.repo.local.HistoryDataBase
+import com.example.gbandroidpro.presenter.repo.local.AppDataBase
 import com.example.gbandroidpro.presenter.repo.remote.RetrofitImplementation
 import com.example.gbandroidpro.presenter.repo.local.RoomDataBaseImplementation
 import com.example.gbandroidpro.vm.HistoryViewModel
 import com.example.gbandroidpro.vm.MainViewModel
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val application = module {
     single<Repository<List<DataModel>>> { RepositoryImplementation(RetrofitImplementation()) }
 
-    single { Room.databaseBuilder(get(), HistoryDataBase::class.java, "HistoryDB").build() }
-    single { get<HistoryDataBase>().getDao() }
-    single<RepositoryLocal<List<DataModel>>> { RepositoryImplementationLocal(RoomDataBaseImplementation(get())) }
+    single { Room.databaseBuilder(get(), AppDataBase::class.java, "AppDB").build() }
+    single { get<AppDataBase>().getHistoryDao() }
+    single { get<AppDataBase>().getFavouriteDao() }
+    single<RepositoryLocal<List<DataModel>>> { RepositoryImplementationLocal(RoomDataBaseImplementation(get(), get())) }
 }
 
 val mainScreen = module {

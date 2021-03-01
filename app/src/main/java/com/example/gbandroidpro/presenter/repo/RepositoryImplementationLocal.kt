@@ -15,4 +15,20 @@ class RepositoryImplementationLocal(private val dataSource: DataSourceLocal<List
     override suspend fun setData(appState: AppState) {
         dataSource.setData(appState)
     }
+
+    override suspend fun getFavourites(): List<DataModel> {
+        return dataSource.getFavourites()
+    }
+
+    override suspend fun setFavourite(word: String, description: String?) {
+        dataSource.setFavourite(word, description)
+    }
+
+    override suspend fun removeFavourite(word: String) {
+        dataSource.removeFavourite(word)
+    }
+
+    override suspend fun isFavourite(word: String): Boolean {
+        return dataSource.isFavourite(word)
+    }
 }

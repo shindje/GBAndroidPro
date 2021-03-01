@@ -1,4 +1,4 @@
-package com.example.gbandroidpro.view
+package com.example.gbandroidpro.view.history
 
 import android.os.Bundle
 import android.view.View
@@ -6,6 +6,8 @@ import android.widget.Toast
 import com.example.gbandroidpro.R
 import com.example.gbandroidpro.model.DataModel
 import com.example.gbandroidpro.presenter.HistoryInteractor
+import com.example.gbandroidpro.view.AppState
+import com.example.gbandroidpro.view.BaseActivity
 import com.example.gbandroidpro.vm.HistoryViewModel
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -14,7 +16,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import java.lang.IllegalStateException
 import java.util.*
 
-class HistoryActivity:BaseActivity<AppState, HistoryInteractor>() {
+class HistoryActivity: BaseActivity<AppState, HistoryInteractor>() {
 
     override lateinit var model: HistoryViewModel
     private val adapter: HistoryAdapter by lazy { HistoryAdapter() }

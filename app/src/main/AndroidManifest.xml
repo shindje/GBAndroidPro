@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GBAndroidPro"
         android:name=".di.TranslatorApp">
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".view.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.DescriptionActivity" />
-        <activity android:name=".view.HistoryActivity" />
+        <activity android:name=".view.history.HistoryActivity" />
     </application>
 
 </manifest>
