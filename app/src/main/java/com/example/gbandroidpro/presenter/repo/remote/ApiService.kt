@@ -1,4 +1,4 @@
-package com.example.gbandroidpro.presenter.repo
+package com.example.gbandroidpro.presenter.repo.remote
 
 import com.example.gbandroidpro.model.DataModel
 import io.reactivex.Observable

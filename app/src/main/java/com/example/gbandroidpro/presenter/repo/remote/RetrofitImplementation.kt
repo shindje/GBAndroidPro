@@ -1,10 +1,8 @@
-package com.example.gbandroidpro.presenter.repo
+package com.example.gbandroidpro.presenter.repo.remote
 
 import com.example.gbandroidpro.DataSource
 import com.example.gbandroidpro.model.DataModel
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import io.reactivex.Observable
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
