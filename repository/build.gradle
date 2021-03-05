@@ -1,0 +1,19 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+dependencies {
+    implementation project(Modules.model)
+
+    implementation Retrofit.retrofit
+    implementation Retrofit.converter_gson
+    implementation Retrofit.logging_interceptor
+    implementation Retrofit.adapter_rx_java
+    implementation Retrofit.adapter_coroutines
+
+    implementation Room.runtime
+    kapt Room.compiler
+    implementation Room.room_ktx
+}

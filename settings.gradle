@@ -1,2 +1,9 @@
+include ':description'
+include ':main'
 include ':app'
+include ':core'
+include ':history'
+include ':repository'
+include ':model'
+include ':utils'
 rootProject.name = "GBAndroidPro"

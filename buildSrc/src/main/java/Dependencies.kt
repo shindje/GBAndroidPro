@@ -20,7 +20,9 @@ object Modules {
     const val repository = ":repository"
     const val utils = ":utils"
     // Features
-    const val historyScreen = ":historyScreen"
+    const val main = ":main"
+    const val history = ":history"
+    const val description = ":description"
 }
 
 object Versions {
@@ -59,11 +61,6 @@ object Versions {
     const val roomKtx = "2.3.0-beta02"
     const val runtime = "2.3.0-beta02"
     const val roomCompiler = "2.3.0-beta02"
-
-    // Test
-    const val jUnit = "4.13.2"
-    const val runner = "1.3.0"
-    const val espressoCore = "3.3.0"
 }
 
 
@@ -110,10 +107,4 @@ object Room {
     const val runtime = "androidx.room:room-runtime:${Versions.runtime}"
     const val compiler = "androidx.room:room-compiler:${Versions.roomCompiler}"
     const val room_ktx = "androidx.room:room-ktx:${Versions.roomKtx}"
-}
-
-object TestImpl {
-    const val junit = "junit:junit:${Versions.jUnit}"
-    const val runner = "androidx.test:runner:${Versions.runner}"
-    const val espresso = "androidx.test.espresso:espresso-core:${Versions.espressoCore}"
 }

@@ -1,0 +1,19 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+
+dependencies {
+    implementation project(Modules.model)
+    implementation project(Modules.repository)
+    implementation project(Modules.utils)
+
+    implementation Design.appcompat
+    implementation Design.material
+    implementation Design.swipeRefreshLayout
+    implementation Design.constraintLayout
+    implementation Glide.glide
+    kapt Glide.glide_compiler
+}

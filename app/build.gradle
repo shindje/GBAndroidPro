@@ -5,65 +5,22 @@ plugins {
     id 'kotlin-kapt'
 }
 
-android {
-    compileSdkVersion Config.compile_sdk
-    buildToolsVersion "30.0.2"
-
-    defaultConfig {
-        applicationId Config.application_id
-        minSdkVersion Config.min_sdk
-        targetSdkVersion Config.target_sdk
-        versionCode Releases.version_code
-        versionName Releases.version_name
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility Config.java_version
-        targetCompatibility Config.java_version
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-}
-
 dependencies {
+    implementation project(Modules.core)
+    implementation project(Modules.main)
+    implementation project(Modules.history)
+    implementation project(Modules.description)
+    implementation project(Modules.repository)
+    implementation project(Modules.model)
+    implementation project(Modules.utils)
+
     implementation Kotlin.core
     implementation Kotlin.stdlib
-
-    implementation Kotlin.coroutines_core
-    implementation Kotlin.coroutines_android
-
-    implementation Design.appcompat
-    implementation Design.material
-    implementation Design.swipeRefreshLayout
-    implementation Design.constraintLayout
 
     implementation RxJava.rxAndroid
     implementation RxJava.rxJava
 
-    implementation Retrofit.retrofit
-    implementation Retrofit.converter_gson
-    implementation Retrofit.logging_interceptor
-    implementation Retrofit.adapter_rx_java
-    implementation Retrofit.adapter_coroutines
-
-    testImplementation TestImpl.junit
-    androidTestImplementation TestImpl.runner
-    androidTestImplementation TestImpl.espresso
-
     implementation Koin.koin_android
-    implementation Koin.koin_view_model
-
-    implementation Glide.glide
-    kapt Glide.glide_compiler
 
     implementation Room.runtime
     kapt Room.compiler

@@ -37,6 +37,11 @@ subprojects {
                     targetCompatibility Config.java_version
                 }
             }
+
+            dependencies {
+                implementation Kotlin.core
+                implementation Kotlin.stdlib
+            }
         }
 
     }
