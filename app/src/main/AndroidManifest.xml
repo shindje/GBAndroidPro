@@ -13,15 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GBAndroidPro"
         android:name=".di.TranslatorApp">
-        <activity android:name=".view.main.MainActivity">
+        <activity android:name="com.example.main.view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.DescriptionActivity" />
-        <activity android:name=".view.history.HistoryActivity" />
+        <activity android:name="com.example.description.DescriptionActivity" />
+        <activity android:name="com.example.history.view.HistoryActivity" />
     </application>
 
 </manifest>

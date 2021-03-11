@@ -3,25 +3,32 @@ package com.example.gbandroidpro.di.koin
 import androidx.room.Room
 import com.example.gbandroidpro.Repository
 import com.example.gbandroidpro.RepositoryLocal
-import com.example.gbandroidpro.model.DataModel
-import com.example.gbandroidpro.presenter.HistoryInteractor
-import com.example.gbandroidpro.presenter.MainInteractor
-import com.example.gbandroidpro.presenter.repo.RepositoryImplementation
-import com.example.gbandroidpro.presenter.repo.RepositoryImplementationLocal
-import com.example.gbandroidpro.presenter.repo.local.AppDataBase
-import com.example.gbandroidpro.presenter.repo.remote.RetrofitImplementation
-import com.example.gbandroidpro.presenter.repo.local.RoomDataBaseImplementation
-import com.example.gbandroidpro.vm.HistoryViewModel
-import com.example.gbandroidpro.vm.MainViewModel
+import com.example.history.presenter.HistoryInteractor
+import com.example.history.vm.HistoryViewModel
+import com.example.main.presenter.MainInteractor
+import com.example.main.vm.MainViewModel
+import com.example.repository.RepositoryImplementation
+import com.example.repository.RepositoryImplementationLocal
+import com.example.repository.local.AppDataBase
+import com.example.repository.remote.RetrofitImplementation
+import com.example.repository.local.RoomDataBaseImplementation
 import org.koin.dsl.module
 
 val application = module {
-    single<Repository<List<DataModel>>> { RepositoryImplementation(RetrofitImplementation()) }
+    single<Repository<List<com.example.model.DataModel>>> {
+        RepositoryImplementation(
+            RetrofitImplementation()
+        )
+    }
 
     single { Room.databaseBuilder(get(), AppDataBase::class.java, "AppDB").build() }
     single { get<AppDataBase>().getHistoryDao() }
     single { get<AppDataBase>().getFavouriteDao() }
-    single<RepositoryLocal<List<DataModel>>> { RepositoryImplementationLocal(RoomDataBaseImplementation(get(), get())) }
+    single<RepositoryLocal<List<com.example.model.DataModel>>> {
+        RepositoryImplementationLocal(
+            RoomDataBaseImplementation(get(), get())
+        )
+    }
 }
 
 val mainScreen = module {
