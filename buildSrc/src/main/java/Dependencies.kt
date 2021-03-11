@@ -23,6 +23,7 @@ object Modules {
     const val main = ":main"
     const val history = ":history"
     const val description = ":description"
+    const val koin = ":koin"
 }
 
 object Versions {

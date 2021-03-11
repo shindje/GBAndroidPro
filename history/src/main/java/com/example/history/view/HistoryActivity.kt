@@ -3,12 +3,13 @@ package com.example.history.view
 import androidx.lifecycle.ViewModel
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.Toast
 import com.example.history.R
+import com.example.history.injectDependencies
 import com.example.history.vm.HistoryViewModel
 import com.example.model.AppState
 import kotlinx.android.synthetic.main.activity_history.*
-import kotlinx.android.synthetic.main.include_loading_frame_layout.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.lang.IllegalStateException
 import java.util.*
@@ -38,6 +39,7 @@ class HistoryActivity: com.example.core.view.BaseActivity<AppState, com.example.
         if (rv_history.adapter != null) {
             throw IllegalStateException("Error")
         }
+        injectDependencies()
         val viewModel: HistoryViewModel by viewModel()
         model = viewModel
         model.subscribe().observe(this@HistoryActivity, { renderData(it) })
@@ -53,11 +55,11 @@ class HistoryActivity: com.example.core.view.BaseActivity<AppState, com.example.
 
     override fun showViewLoading() {
         rv_history.visibility = View.GONE
-        loading_frame_layout.visibility = View.VISIBLE
+        findViewById<FrameLayout>(com.example.main.R.id.loading_frame_layout).visibility = View.VISIBLE
     }
 
     override fun showViewSuccess() {
         rv_history.visibility = View.VISIBLE
-        loading_frame_layout.visibility = View.GONE
+        findViewById<FrameLayout>(com.example.main.R.id.loading_frame_layout).visibility = View.GONE
     }
 }

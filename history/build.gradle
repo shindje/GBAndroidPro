@@ -1,12 +1,30 @@
 plugins {
-    id 'com.android.library'
+    id 'com.android.dynamic-feature'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
 }
 
+android {
+    compileSdkVersion Config.compile_sdk
+
+    defaultConfig {
+        minSdkVersion Config.min_sdk
+        targetSdkVersion Config.target_sdk
+        versionCode Releases.version_code
+        versionName Releases.version_name
+    }
+
+    compileOptions {
+        sourceCompatibility Config.java_version
+        targetCompatibility Config.java_version
+    }
+}
+
 dependencies {
+    implementation project(Modules.app)
     implementation project(Modules.core)
+    implementation project(Modules.koin)
 
     implementation project(Modules.repository)
     implementation project(Modules.model)

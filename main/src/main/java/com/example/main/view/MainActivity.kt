@@ -4,25 +4,35 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.core.view.BaseActivity
 import com.example.description.DescriptionActivity
-import com.example.history.view.HistoryActivity
 import com.example.main.R
+import com.example.main.injectDependencies
 import com.example.main.presenter.MainInteractor
 import com.example.main.vm.MainViewModel
 import com.example.model.AppState
+import com.google.android.play.core.splitinstall.SplitInstallManager
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.google.android.play.core.splitinstall.SplitInstallRequest
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.include_loading_frame_layout.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
+private const val HISTORY_ACTIVITY_PATH = "com.example.history.view.HistoryActivity"
+private const val HISTORY_ACTIVITY_FEATURE_NAME = "history"
+
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
+    private lateinit var splitInstallManager: SplitInstallManager
     private var adapter: MainAdapter? = null // Адаптер для отображения списка вариантов перевода
     override val model: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        injectDependencies()
 
         setContentView(R.layout.activity_main)
         search_fab.setOnClickListener {
@@ -36,7 +46,17 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         }
 
         history_fab.setOnClickListener {
-            startActivity(Intent(this, HistoryActivity::class.java))
+            splitInstallManager = SplitInstallManagerFactory.create(applicationContext)
+            val request = SplitInstallRequest.newBuilder()
+                .addModule(HISTORY_ACTIVITY_FEATURE_NAME)
+                .build()
+            splitInstallManager.startInstall(request)
+                .addOnSuccessListener {
+                    startActivity(Intent().setClassName(packageName, HISTORY_ACTIVITY_PATH))
+                }
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext, "Couldn't download feature: " + it.message, Toast.LENGTH_LONG).show()
+                }
         }
 
         favourites_fab.setOnClickListener {
@@ -98,19 +118,19 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     override fun showViewSuccess() {
         main_activity_recyclerview.visibility = VISIBLE
-        loading_frame_layout.visibility = GONE
+        findViewById<FrameLayout>(R.id.loading_frame_layout).visibility = GONE
         error_linear_layout.visibility = GONE
     }
 
     override fun showViewLoading() {
         main_activity_recyclerview.visibility = GONE
-        loading_frame_layout.visibility = VISIBLE
+        findViewById<FrameLayout>(R.id.loading_frame_layout).visibility = VISIBLE
         error_linear_layout.visibility = GONE
     }
 
     private fun showViewError() {
         main_activity_recyclerview.visibility = GONE
-        loading_frame_layout.visibility = GONE
+        findViewById<FrameLayout>(R.id.loading_frame_layout).visibility = GONE
         error_linear_layout.visibility = VISIBLE
     }
 
