@@ -26,7 +26,7 @@ dependencies {
 
     implementation Koin.koin_android
 
-    implementation 'com.google.android.play:core:1.10.0'
+    implementation GooglePlay.core
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }

@@ -62,6 +62,9 @@ object Versions {
     const val roomKtx = "2.3.0-beta02"
     const val runtime = "2.3.0-beta02"
     const val roomCompiler = "2.3.0-beta02"
+
+    //Google Play
+    const val playCore = "1.10.0"
 }
 
 
@@ -108,4 +111,8 @@ object Room {
     const val runtime = "androidx.room:room-runtime:${Versions.runtime}"
     const val compiler = "androidx.room:room-compiler:${Versions.roomCompiler}"
     const val room_ktx = "androidx.room:room-ktx:${Versions.roomKtx}"
+}
+
+object GooglePlay {
+    const val core = "com.google.android.play:core:${Versions.playCore}"
 }
