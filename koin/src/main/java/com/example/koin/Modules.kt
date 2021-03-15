@@ -1,12 +1,8 @@
-package com.example.gbandroidpro.di.koin
+package com.example.koin
 
 import androidx.room.Room
 import com.example.gbandroidpro.Repository
 import com.example.gbandroidpro.RepositoryLocal
-import com.example.history.presenter.HistoryInteractor
-import com.example.history.vm.HistoryViewModel
-import com.example.main.presenter.MainInteractor
-import com.example.main.vm.MainViewModel
 import com.example.repository.RepositoryImplementation
 import com.example.repository.RepositoryImplementationLocal
 import com.example.repository.local.AppDataBase
@@ -29,14 +25,4 @@ val application = module {
             RoomDataBaseImplementation(get(), get())
         )
     }
-}
-
-val mainScreen = module {
-    factory { MainInteractor(get(), get()) }
-    factory { MainViewModel(get()) }
-}
-
-val historyScreen = module {
-    factory { HistoryViewModel(get()) }
-    factory { HistoryInteractor(get(), get()) }
 }

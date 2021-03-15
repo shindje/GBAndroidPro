@@ -5,14 +5,18 @@ plugins {
     id 'kotlin-kapt'
 }
 
+android {
+    dynamicFeatures = [Modules.history]
+}
+
 dependencies {
     implementation project(Modules.core)
     implementation project(Modules.main)
-    implementation project(Modules.history)
     implementation project(Modules.description)
     implementation project(Modules.repository)
     implementation project(Modules.model)
     implementation project(Modules.utils)
+    implementation project(Modules.koin)
 
     implementation Kotlin.core
     implementation Kotlin.stdlib
@@ -22,9 +26,7 @@ dependencies {
 
     implementation Koin.koin_android
 
-    implementation Room.runtime
-    kapt Room.compiler
-    implementation Room.room_ktx
+    implementation GooglePlay.core
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
