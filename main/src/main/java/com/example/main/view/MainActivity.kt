@@ -27,7 +27,7 @@ import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
 import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.scope.currentScope
 
 private const val HISTORY_ACTIVITY_PATH = "com.example.history.view.HistoryActivity"
 private const val HISTORY_ACTIVITY_FEATURE_NAME = "history"
@@ -37,7 +37,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private lateinit var splitInstallManager: SplitInstallManager
     private lateinit var appUpdateManager: AppUpdateManager
     private var adapter: MainAdapter? = null // Адаптер для отображения списка вариантов перевода
-    override val model: MainViewModel by viewModel()
+    override lateinit var model: MainViewModel
 
     private fun popupSnackbarForCompleteUpdate() {
         Snackbar.make(
@@ -65,8 +65,10 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         super.onCreate(savedInstanceState)
 
         injectDependencies()
-
         checkForUpdates()
+
+        val viewModel: MainViewModel by currentScope.inject()
+        model = viewModel
 
         setContentView(R.layout.activity_main)
         search_fab.setOnClickListener {

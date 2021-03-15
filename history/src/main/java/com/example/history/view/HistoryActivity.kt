@@ -1,6 +1,5 @@
 package com.example.history.view
 
-import androidx.lifecycle.ViewModel
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
@@ -10,7 +9,7 @@ import com.example.history.injectDependencies
 import com.example.history.vm.HistoryViewModel
 import com.example.model.AppState
 import kotlinx.android.synthetic.main.activity_history.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.scope.currentScope
 import java.lang.IllegalStateException
 import java.util.*
 
@@ -40,7 +39,7 @@ class HistoryActivity: com.example.core.view.BaseActivity<AppState, com.example.
             throw IllegalStateException("Error")
         }
         injectDependencies()
-        val viewModel: HistoryViewModel by viewModel()
+        val viewModel: HistoryViewModel by currentScope.inject()
         model = viewModel
         model.subscribe().observe(this@HistoryActivity, { renderData(it) })
     }
