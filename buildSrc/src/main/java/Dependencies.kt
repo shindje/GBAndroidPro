@@ -27,6 +27,9 @@ object Modules {
 }
 
 object Versions {
+    //LiveData
+    const val liveDataKtx = "2.3.0"
+
     // Design
     const val appcompat = "1.2.0"
     const val material = "1.3.0"
@@ -115,4 +118,8 @@ object Room {
 
 object GooglePlay {
     const val core = "com.google.android.play:core:${Versions.playCore}"
+}
+
+object LiveData {
+    const val live_data = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.liveDataKtx}"
 }
