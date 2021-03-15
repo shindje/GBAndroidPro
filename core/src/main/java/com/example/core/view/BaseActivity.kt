@@ -1,5 +1,6 @@
 package com.example.core.view
 
+import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.core.R
@@ -14,6 +15,12 @@ abstract class BaseActivity<T : AppState, V: Interactor<T>> : AppCompatActivity(
     abstract fun showError(error: String?)
     abstract fun showViewLoading()
     abstract fun showViewSuccess()
+    protected abstract val layoutResId: Int
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(layoutResId)
+    }
 
     protected fun renderData(appState: T) {
         when (appState) {

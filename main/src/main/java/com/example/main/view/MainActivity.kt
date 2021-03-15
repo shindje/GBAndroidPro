@@ -47,6 +47,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private val historyFab by viewById<ImageButton>(R.id.history_fab)
     private val favouritesFab by viewById<ImageButton>(R.id.favourites_fab)
 
+    override val layoutResId = R.layout.activity_main
 
     private fun popupSnackbarForCompleteUpdate() {
         Snackbar.make(
@@ -79,7 +80,6 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         val viewModel: MainViewModel by currentScope.inject()
         model = viewModel
 
-        setContentView(R.layout.activity_main)
         searchFab.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(object : SearchDialogFragment.OnSearchClickListener {

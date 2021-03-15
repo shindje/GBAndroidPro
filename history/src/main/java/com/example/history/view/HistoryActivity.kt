@@ -18,9 +18,10 @@ class HistoryActivity: com.example.core.view.BaseActivity<AppState, com.example.
     override lateinit var model: HistoryViewModel
     private val adapter: HistoryAdapter by lazy { HistoryAdapter() }
 
+    override val layoutResId = R.layout.activity_history
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_history)
         initViewModel()
         initViews()
     }
