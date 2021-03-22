@@ -1,7 +1,11 @@
 package com.example.main.view
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.*
@@ -109,6 +113,22 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         }
 
         model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        menu?.findItem(R.id.menu_settings)?.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_settings -> {
+                startActivityForResult(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY), 111)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     // Обработка нажатия элемента списка
