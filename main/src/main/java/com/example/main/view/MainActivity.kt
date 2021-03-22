@@ -4,10 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.FrameLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.core.view.BaseActivity
 import com.example.description.DescriptionActivity
 import com.example.main.R
@@ -15,6 +15,7 @@ import com.example.main.injectDependencies
 import com.example.main.presenter.MainInteractor
 import com.example.main.vm.MainViewModel
 import com.example.model.AppState
+import com.example.utils.viewById
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -26,8 +27,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
-import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.scope.currentScope
 
 private const val HISTORY_ACTIVITY_PATH = "com.example.history.view.HistoryActivity"
 private const val HISTORY_ACTIVITY_FEATURE_NAME = "history"
@@ -37,7 +37,17 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private lateinit var splitInstallManager: SplitInstallManager
     private lateinit var appUpdateManager: AppUpdateManager
     private var adapter: MainAdapter? = null // Адаптер для отображения списка вариантов перевода
-    override val model: MainViewModel by viewModel()
+    override lateinit var model: MainViewModel
+
+    private val mainActivityRecyclerview by viewById<RecyclerView>(R.id.main_activity_recyclerview)
+    private val errorLinearLayout by viewById<LinearLayout>(R.id.error_linear_layout)
+    private val errorTextView by viewById<TextView>(R.id.error_textview)
+    private val reloadButton by viewById<Button>(R.id.reload_button)
+    private val searchFab by viewById<ImageButton>(R.id.search_fab)
+    private val historyFab by viewById<ImageButton>(R.id.history_fab)
+    private val favouritesFab by viewById<ImageButton>(R.id.favourites_fab)
+
+    override val layoutResId = R.layout.activity_main
 
     private fun popupSnackbarForCompleteUpdate() {
         Snackbar.make(
@@ -65,11 +75,12 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         super.onCreate(savedInstanceState)
 
         injectDependencies()
-
         checkForUpdates()
 
-        setContentView(R.layout.activity_main)
-        search_fab.setOnClickListener {
+        val viewModel: MainViewModel by currentScope.inject()
+        model = viewModel
+
+        searchFab.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(object : SearchDialogFragment.OnSearchClickListener {
                 override fun onClick(searchWord: String) {
@@ -79,7 +90,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
 
-        history_fab.setOnClickListener {
+        historyFab.setOnClickListener {
             splitInstallManager = SplitInstallManagerFactory.create(applicationContext)
             val request = SplitInstallRequest.newBuilder()
                 .addModule(HISTORY_ACTIVITY_FEATURE_NAME)
@@ -93,7 +104,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                 }
         }
 
-        favourites_fab.setOnClickListener {
+        favouritesFab.setOnClickListener {
             model.getFavourites()
         }
 
@@ -134,9 +145,9 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     override fun setDataToAdapter(data: List<com.example.model.DataModel>) {
         if (adapter == null) {
-            main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
+            mainActivityRecyclerview.layoutManager = LinearLayoutManager(applicationContext)
             adapter = MainAdapter(onItemClickListener, onFavouriteClickListener, data)
-            main_activity_recyclerview.adapter = adapter
+            mainActivityRecyclerview.adapter = adapter
         } else {
             adapter!!.setData(data)
         }
@@ -144,28 +155,28 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     override fun showError(error: String?) {
         showViewError()
-        error_textview.text = error ?: getString(R.string.undefined_error)
-        reload_button.setOnClickListener {
+        errorTextView.text = error ?: getString(R.string.undefined_error)
+        reloadButton.setOnClickListener {
             model.getData("hi", true)
         }
     }
 
     override fun showViewSuccess() {
-        main_activity_recyclerview.visibility = VISIBLE
+        mainActivityRecyclerview.visibility = VISIBLE
         findViewById<FrameLayout>(R.id.loading_frame_layout).visibility = GONE
-        error_linear_layout.visibility = GONE
+        errorLinearLayout.visibility = GONE
     }
 
     override fun showViewLoading() {
-        main_activity_recyclerview.visibility = GONE
+        mainActivityRecyclerview.visibility = GONE
         findViewById<FrameLayout>(R.id.loading_frame_layout).visibility = VISIBLE
-        error_linear_layout.visibility = GONE
+        errorLinearLayout.visibility = GONE
     }
 
     private fun showViewError() {
-        main_activity_recyclerview.visibility = GONE
+        mainActivityRecyclerview.visibility = GONE
         findViewById<FrameLayout>(R.id.loading_frame_layout).visibility = GONE
-        error_linear_layout.visibility = VISIBLE
+        errorLinearLayout.visibility = VISIBLE
     }
 
     private fun checkForUpdates() {

@@ -5,4 +5,5 @@ plugins {
 
 dependencies {
     implementation project(Modules.model)
+    implementation LiveData.live_data
 }
